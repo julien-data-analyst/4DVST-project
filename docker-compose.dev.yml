@@ -1,0 +1,101 @@
+
+services:
+
+  # ─────────────────────────────────────────
+  # PostgreSQL — base de données partagée
+  # (utilisée par dbt ET Metabase)
+  # ─────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      POSTGRES_DB: ${POSTGRES_DB:-datawarehouse}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d   # scripts SQL exécutés au premier démarrage
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-datawarehouse}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - data_network
+
+  # ─────────────────────────────────────────
+  # Metabase — BI & dashboards
+  # ─────────────────────────────────────────
+  metabase:
+    build: 
+      context: ./metabase
+    container_name: metabase
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Base de données interne de Metabase (stocke sources, dashboards, questions)
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: ${METABASE_DB:-metabase}
+      MB_DB_PORT: 5432
+      MB_DB_USER: ${POSTGRES_USER:-admin}
+      MB_DB_PASS: ${POSTGRES_PASSWORD:-admin}
+      MB_DB_HOST: postgres
+      # Options générales
+      MB_SITE_URL: http://localhost:3000
+      JAVA_TIMEZONE: Europe/Paris
+      MB_ENCRYPTION_SECRET_KEY: ${MB_ENCRYPTION_SECRET_KEY:-changeme_secret_32chars_minimum!!}
+    volumes:
+      # Plugins / drivers additionnels (.jar) → monté dans le dossier plugins officiel
+      - ./metabase/resources:/plugins
+      # Exports JSON des dashboards (générés par metabase/export_dashboards.sh)
+      - ./metabase/dashboards:/metabase-dashboards
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      # curl est disponible dans l'image officielle Metabase
+      test: ["CMD-SHELL", "curl -sf http://localhost:3000/api/health | grep -q '\"status\":\"ok\"'"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s   # l'image officielle démarre plus lentement que le JAR nu
+    networks:
+      - data_network
+
+  # ─────────────────────────────────────────
+  # DBT — transformation de données
+  # ─────────────────────────────────────────
+  dbt-dev:
+    build:
+      context: ./dbt-dev # search the Dockerfile
+      args:
+        PYTHON_VERSION: ${PYTHON_VERSION} # Define the version of python using .env
+    container_name: dbt-dev # Container name
+    environment:
+      DBT_PROFILES_DIR: /app/meteo # Point DBT to the correct profiles.yml location
+    env_file:
+      - .env # For the python script to get access to environment variables
+    volumes:
+      - ./dbt-dev/meteo:/app/meteo # Useful for hot reload under Linux systems
+    working_dir: /app/meteo
+    stdin_open: true # Let the container open even after finishing his command
+    tty: true
+    networks:
+      - data_network
+# ─────────────────────────────────────────
+# Volumes nommés (données persistantes)
+# ─────────────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+
+# ─────────────────────────────────────────
+# Réseau interne
+# ─────────────────────────────────────────
+networks:
+  data_network:
+    driver: bridge
