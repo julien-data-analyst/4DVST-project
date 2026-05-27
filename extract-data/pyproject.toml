@@ -1,0 +1,12 @@
+[project]
+name = "python-script"
+version = "0.1.0"
+description = "Ici, nous allons créer des scripts d'extraction qui vont être exécutés pour insérer les données CSV dans la base de données"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "polars",
+    "psycopg2-binary",
+    "shapely",
+    "orjson"
+]

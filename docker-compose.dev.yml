@@ -86,6 +86,28 @@ services:
     tty: true
     networks:
       - data_network
+
+  # ─────────────────────────────────────────
+  # Python Extract — extraction de données (ex: scripts d'extraction GeoJSON/CSV)
+  # ─────────────────────────────────────────
+  python-extract:
+    build:
+      context: ./extract-data
+    container_name: python-extract
+    env_file:
+      - .env
+    volumes:
+      - ./extract-data:/app
+      - ./data:/data
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - data_network
+
 # ─────────────────────────────────────────
 # Volumes nommés (données persistantes)
 # ─────────────────────────────────────────
