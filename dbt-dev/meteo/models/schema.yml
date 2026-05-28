@@ -1,0 +1,45 @@
+sources:
+  - name: weather_climatic_data
+    description: "Source de tables SQL définies pour la météo en France avec les départements"
+    database: datawarehouse  
+    schema: public
+    tables:
+      - name: weather_mountain_nivo
+        description: "Table source SQL pour les conditions météorologiques en montagne"
+
+      - name: climatic_change_monthly
+        description: "Table source SQL pour les données climatiques mensuelles" 
+
+      - name: regions
+        description: "La table SQL pour les régions françaises"
+        columns:
+          - name: code
+            tests:
+              - unique
+              - not_null
+        
+          - name: name
+            tests:
+              - unique
+              - not_null
+          
+          - name: geometry
+            tests:
+              - not_null
+
+      - name: departments
+        description: "La table SQL pour les départements français"
+        columns:
+          - name: code
+            tests:
+              - unique
+              - not_null
+        
+          - name: name
+            tests:
+              - unique
+              - not_null
+          
+          - name: geometry
+            tests:
+              - not_null
