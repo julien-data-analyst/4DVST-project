@@ -27,7 +27,7 @@ sources:
             tests:
               - not_null
 
-      - name: departments
+      - name: departements
         description: "La table SQL pour les départements français"
         columns:
           - name: code
