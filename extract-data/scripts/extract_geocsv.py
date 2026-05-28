@@ -19,10 +19,10 @@ import csv
 # CONFIG
 # -----------------------------
 NIVOCSV_FILE = Path("/data/NIVO/")
-TABLE_NAME_NIVEO = "nivo"
+TABLE_NAME_NIVEO = "weather_mountain_nivo"
 
 MENSUELCSV_FILE = Path("/data/MENSUEL/")
-TABLE_NAME_MENSUEL = "mensuel"
+TABLE_NAME_MENSUEL = "climatic_change_monthly"
 
 #-----------------------------
 # FONCTION DE DETECTION DU SEPARATEUR ET DE L'EN-TETE

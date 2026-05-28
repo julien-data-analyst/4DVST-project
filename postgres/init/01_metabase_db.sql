@@ -12,5 +12,5 @@ WHERE NOT EXISTS (
 
 -- Schéma dbt dev (optionnel, dbt peut le créer lui-même)
 -- Décommentez si vous souhaitez pré-créer le schéma
--- \c datawarehouse;
--- CREATE SCHEMA IF NOT EXISTS dbt_dev;
+CREATE SCHEMA IF NOT EXISTS processing;
+CREATE SCHEMA IF NOT EXISTS marts;
