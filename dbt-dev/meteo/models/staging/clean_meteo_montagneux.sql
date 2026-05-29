@@ -4,11 +4,20 @@
     schema='processing'
 ) }}
 SELECT 
+        id,
+
         NULLIF(lat, '')::FLOAT AS latitude,
         NULLIF(lon, '')::FLOAT AS longitude,
+        public.st_setsrid(
+            public.st_makepoint(
+                NULLIF(lon, '')::FLOAT,
+                NULLIF(lat, '')::FLOAT),
+            4326) AS geom,
         NULLIF("Altitude", '')::FLOAT AS altitude,
+
         name AS station_name,
         NULLIF(validity_time, '')::TIMESTAMP AS measure_datetime,
+
         NULLIF(t, '')::FLOAT AS temperature_k,
         NULLIF(dd, '')::INTEGER AS direction_vent_deg,
         NULLIF(ff, '')::FLOAT AS vitesse_vent_moyen_10min_m_s,

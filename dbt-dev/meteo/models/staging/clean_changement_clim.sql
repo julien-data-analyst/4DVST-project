@@ -4,6 +4,7 @@
     schema='processing'
 ) }}
 SELECT 
+        id,
         to_date("DATE", 'YYYYMM') AS measure_date,
         NULLIF("PRENEI", '')::FLOAT AS solids_precipitations_mm,
         NULLIF("PRELIQ", '')::FLOAT AS liquid_precipitations_mm,
@@ -24,5 +25,5 @@ SELECT
         NULLIF("DRAINC", '')::FLOAT AS drainage_mm,
         NULLIF("RUNC", '')::FLOAT AS ruissellement_mm,
         NULLIF("ECOULEMENT", '')::FLOAT AS ecoulement_neigeux_mm
-        
+
 FROM {{ source('weather_climatic_data', 'climatic_change_monthly') }}

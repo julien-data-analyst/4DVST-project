@@ -73,6 +73,7 @@ def create_table_text(conn, table_name, columns, schema="public"):
 
     sql = f"""
     CREATE TABLE IF NOT EXISTS "{schema}"."{table_name}" (
+        id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
         {cols_sql}
     );
     """

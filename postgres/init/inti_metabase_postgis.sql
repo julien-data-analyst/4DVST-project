@@ -14,3 +14,4 @@ WHERE NOT EXISTS (
 -- Décommentez si vous souhaitez pré-créer le schéma
 CREATE SCHEMA IF NOT EXISTS processing;
 CREATE SCHEMA IF NOT EXISTS marts;
+CREATE EXTENSION postgis SCHEMA public;

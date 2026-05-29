@@ -1,7 +1,7 @@
 {{ config(
     materialized='table',
     schema='processing',
-    tags='regions-deps'
+    tags=['regions-deps', 'montagneux']
 ) }}
 
 SELECT
