@@ -5,6 +5,7 @@
 ) }}
 SELECT 
         id,
+        CONCAT("LAMBX", "LAMBY") AS identifier_unique,
         to_date("DATE", 'YYYYMM') AS measure_date,
         NULLIF("PRENEI", '')::FLOAT AS solids_precipitations_mm,
         NULLIF("PRELIQ", '')::FLOAT AS liquid_precipitations_mm,

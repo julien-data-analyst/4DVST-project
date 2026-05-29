@@ -18,7 +18,8 @@ SELECT
         name AS station_name,
         NULLIF(validity_time, '')::TIMESTAMP AS measure_datetime,
 
-        NULLIF(t, '')::FLOAT AS temperature_k,
+        NULLIF(t, '')::FLOAT  - 273.15 AS temperature_celsius,
+
         NULLIF(dd, '')::INTEGER AS direction_vent_deg,
         NULLIF(ff, '')::FLOAT AS vitesse_vent_moyen_10min_m_s,
         NULLIF(u, '')::FLOAT AS humidity_percent,
@@ -26,13 +27,13 @@ SELECT
         NULLIF(nbas, '')::FLOAT AS nebulosity_bas_oktas,
         NULLIF(hbas, '')::FLOAT AS hauteu_bas_m,
         NULLIF(rr24, '')::FLOAT AS precipitations_24h_mm,
-        NULLIF(tn12, '')::FLOAT AS temperature_min_12h_k,
-        NULLIF(tx12, '')::FLOAT AS temperature_max_12h_k,
-        NULLIF(tn24, '')::FLOAT AS temperature_min_24h_k,
-        NULLIF(tx24, '')::FLOAT AS temperature_max_24h_k,
+        NULLIF(tn12, '')::FLOAT - 273.15 AS temperature_min_12h_celsius,
+        NULLIF(tx12, '')::FLOAT - 273.15 AS temperature_max_12h_celsius,
+        NULLIF(tn24, '')::FLOAT - 273.15 AS temperature_min_24h_celsius,
+        NULLIF(tx24, '')::FLOAT - 273.15 AS temperature_max_24h_celsius,
         NULLIF(ht_neige, '')::FLOAT AS hauteur_total_neige_m,
         NULLIF(ssfrai, '')::FLOAT AS haute_neige_fraiche_m,
-        NULLIF(t_neige, '')::FLOAT AS temperature_neige_k,
+        NULLIF(t_neige, '')::FLOAT - 273.15 AS temperature_neige_celsius,
 
         CASE chasse_neige
             WHEN '0' THEN 'absence chasse-neige'
