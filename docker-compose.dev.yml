@@ -6,7 +6,7 @@ services:
   # (utilisée par dbt ET Metabase)
   # ─────────────────────────────────────────
   postgres:
-    image: postgres:16-alpine
+    image: postgis/postgis:16-3.4 # extension for using geom function
     container_name: postgres
     restart: unless-stopped
     environment:
