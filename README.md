@@ -21,13 +21,51 @@ Pour mener à bien ce projet, plusieurs technologies ont dû être utilisées no
 
 # Comment lancer le projet
 
-Pour lancer le projet, il vous suffit de cloner le repository et de lancer la commande suivante à la racine du projet :
+Pour lancer le projet, il vous suffit de cloner le repository et de lancer l'une des commandes suivantes à la racine du projet :
+
+## Mode développement
 
 ```bash
 docker-compose -f docker-compose.dev.yml up --build
 ```
 
-Cette commande va construire les images Docker nécessaires et lancer les conteneurs pour PostgreSQL, dbt et Metabase.
+Ce mode démarre les conteneurs pour PostgreSQL, dbt et Metabase. Après le démarrage, vous devrez exécuter manuellement les extractions et les modèles dbt dans les conteneurs concernés. Consultez les README des dossiers `extract-data/` et `dbt-dev/` pour les instructions détaillées.
+
+## Mode production
+
+```bash
+docker-compose -f docker-compose.prod.yml up --build
+```
+
+Ce mode démarre le projet en configuration production.
+
+## Accéder à Metabase
+
+Après une initialisation complète, Metabase est accessible depuis :
+
+http://localhost:3000/
+
+# Notes sur l'utilisation
+
+- En mode développement, l'exécution complète du pipeline n'est pas automatisée : il faut lancer les extractions puis les modèles dbt manuellement.
+- En mode production, l'objectif est de disposer d'un environnement plus proche d'un déploiement final.
+
+# Dashboards Metabase
+
+Le projet comprend deux dashboards principaux avec des axes d'analyse distincts :
+
+- **Impact_climat_meteo_montagneux** : axe d'analyse pour observer l'impact du changement climatique sur la météo en zone montagneuse.
+- **Historique_meteo** : historique de la météo en montagne.
+
+# Branches créées
+
+Pour pouvoir faire le projet, plusieurs branches ont été créées pour pouvoir faire les différentes parties du projet :
+- `main` : branche principale du projet
+- `feat(insertion-mensuel)/insert-with-dbt` : branche pour les extractions avec les deux scripts pythons concernés
+- `feat(dbt-models)/create-processing-models` : branche pour la création des modèles dbt de traitement
+- `feat(dbt-models)/create-analytics-models` : branche pour la création des modèles dbt d'analyse
+- `feat(dashboards-meteo-climat)/create-save-dashboards` : branche pour la création et la sauvegarde des dashboards
+- `feat(documentation-docker-compose-prod)/doc-docker-compose` : branche de développement pour les différentes fonctionnalités
 
 # Syntaxe à respecter pour les branches et commits
 
