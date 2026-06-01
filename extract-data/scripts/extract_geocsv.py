@@ -143,10 +143,11 @@ def process_folder(folder_path, table_name):
 
             print(f"✔ Loaded {file.name} {datetime.datetime.now()}")
 
-print(f"debut import nivo... {datetime.datetime.now()}")
-process_folder(NIVOCSV_FILE, TABLE_NAME_NIVEO)
-print(f"Import NIVO terminé. {datetime.datetime.now()}")
+if "__main__" == __name__:
+    print(f"debut import nivo... {datetime.datetime.now()}")
+    process_folder(NIVOCSV_FILE, TABLE_NAME_NIVEO)
+    print(f"Import NIVO terminé. {datetime.datetime.now()}")
 
-print(f"debut import mensuel... {datetime.datetime.now()}")
-process_folder(MENSUELCSV_FILE, TABLE_NAME_MENSUEL)
-print(f"Import MENSUEL terminé. {datetime.datetime.now()}")
+    print(f"debut import mensuel... {datetime.datetime.now()}")
+    process_folder(MENSUELCSV_FILE, TABLE_NAME_MENSUEL)
+    print(f"Import MENSUEL terminé. {datetime.datetime.now()}")

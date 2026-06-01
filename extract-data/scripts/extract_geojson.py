@@ -62,11 +62,12 @@ def extract_insert_geojson(file_path, table_name):
 
     print("Import terminé.")
 
-# Application à faire
-print(f"debut import départements... {datetime.datetime.now()}")
-extract_insert_geojson(GEOJSON_FILE, TABLE_NAME)
-print(f"Import départements terminé. {datetime.datetime.now()}")
+if "__main__" == __name__:
+    # Application à faire
+    print(f"debut import départements... {datetime.datetime.now()}")
+    extract_insert_geojson(GEOJSON_FILE, TABLE_NAME)
+    print(f"Import départements terminé. {datetime.datetime.now()}")
 
-print(f"debut import régions... {datetime.datetime.now()}")
-extract_insert_geojson(GEOJSON_FILE_REGION, TABLE_NAME_REGION)
-print(f"Import régions terminé. {datetime.datetime.now()}")
+    print(f"debut import régions... {datetime.datetime.now()}")
+    extract_insert_geojson(GEOJSON_FILE_REGION, TABLE_NAME_REGION)
+    print(f"Import régions terminé. {datetime.datetime.now()}")
