@@ -18,6 +18,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d   # scripts SQL exécutés au premier démarrage
+      - ./postgres/metabase.dump:/docker-entrypoint-initdb.d/metabase.dump:ro # Sauvegarde de la base de données Metabase (pour pré-remplir les dashboards, questions, etc.)
+      - ./postgres/restore.sh:/docker-entrypoint-initdb.d/restore.sh:ro # Script de restauration de la base de données (exécuté à chaque démarrage pour écraser les données avec celles de metabase.dump)
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-datawarehouse}"]
       interval: 10s
@@ -51,8 +53,6 @@ services:
     volumes:
       # Plugins / drivers additionnels (.jar) → monté dans le dossier plugins officiel
       - ./metabase/resources:/plugins
-      # Exports JSON des dashboards (générés par metabase/export_dashboards.sh)
-      - ./metabase/dashboards:/metabase-dashboards
     depends_on:
       postgres:
         condition: service_healthy
