@@ -1,8 +1,9 @@
 # 4DVST - Projet de visualisation des données météorologiques montagneuses et du changement climatique
 ## Auteur : Julien RENOULT - Mamadou-alpha DIALLO
 ## Promo : SUPINFO Programme Grande École 4ème année
-### Spécialité : Ingénierie Data
-### Date : 27/05/2026
+### *Spécialité : Ingénierie Data*
+### *Date : 27/05/2026 - 02/06/2026*
+# Lien Projet : https://github.com/julien-data-analyst/4DVST-project
 
 # Introduction
 
@@ -44,6 +45,31 @@ Ce mode démarre le projet en configuration production.
 Après une initialisation complète, Metabase est accessible depuis :
 
 http://localhost:3000/
+
+Vous pourrez accéder aux différents dashboards dans deux collections :
+- **Historique_meteo_montagne** : collection pour les dashboards liés à l'historique de la météo en montagne
+- **Impact_climat_meteo_montagneux** : collection pour les dashboards liés à l'impact du changement climatique sur la météo en zone montagneuse
+
+Si vous avez des soucis sur les visuels, nous vous demandons d'aller sur la page d'administration de Metabase :
+
+![page avec l'onglet administration visible](./imgs/Administration.png)
+
+Cliquer sur le bouton *Administration* et vous accéderez à cette page :
+
+![Page résultante de l'administration](./imgs/Administration_2.png)
+
+Cliquer ensuite sur *Base de données* en haut à gauche et vous accéderez à cette page :
+
+![Page résultante de base de données](./imgs/Administration_3.png)
+
+Cliquer sur la base de données *meteo_climat_database* qui est la connexion à la base de données météorologique et climatique :
+
+![Page résultante de meteo_climat_database](./imgs/Administration_4.png)
+
+Enfin cliquer sur les deux boutons *Synchroniser le schéma de la base de données* et *Réanalyser les valeurs des champs*.
+
+Cela devrait faire apparaître les modèles dans Metabase et les visuels devraient s'afficher correctement.
+
 
 # Notes sur l'utilisation
 
