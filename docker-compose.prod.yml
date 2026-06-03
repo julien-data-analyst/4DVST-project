@@ -6,8 +6,9 @@ services:
   # (utilisée par dbt ET Metabase)
   # ─────────────────────────────────────────
   postgres:
-    image: postgis/postgis:16-3.4 # extension for using geom function
     container_name: postgres
+    build:
+      context: ./postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-admin}
@@ -17,9 +18,6 @@ services:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init:/docker-entrypoint-initdb.d   # scripts SQL exécutés au premier démarrage
-      - ./postgres/metabase.dump:/docker-entrypoint-initdb.d/metabase.dump:ro # Sauvegarde de la base de données Metabase (pour pré-remplir les dashboards, questions, etc.)
-      - ./postgres/restore.sh:/docker-entrypoint-initdb.d/restore.sh:ro # Script de restauration de la base de données (exécuté à chaque démarrage pour écraser les données avec celles de metabase.dump)
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-datawarehouse}"]
       interval: 10s
@@ -28,6 +26,24 @@ services:
     networks:
       - data_network
 
+  postgres-init:
+    image: alpine:3.20
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    volumes:
+      - ./postgres/metabase.dump:/dump/metabase.dump:ro
+
+    entrypoint: >
+      sh -c "
+        echo 'Waiting for restore to finish...' &&
+        sleep 60 &&
+        echo 'Postgres init phase done'
+      "
+
+    networks:
+      - data_network
   # ─────────────────────────────────────────
   # Metabase — BI & dashboards
   # ─────────────────────────────────────────
@@ -56,6 +72,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      dbt-prod:
+        condition: service_completed_successfully
     healthcheck:
       # curl est disponible dans l'image officielle Metabase
       test: ["CMD-SHELL", "curl -sf http://localhost:3000/api/health | grep -q '\"status\":\"ok\"'"]
@@ -116,8 +134,8 @@ services:
     restart: "no"
 
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres-init:
+        condition: service_completed_successfully
 
     networks:
       - data_network
